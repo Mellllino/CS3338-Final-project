@@ -1,0 +1,214 @@
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{tabularx}
+\usepackage{titlesec}
+
+\titleformat{\section}{\Large\bfseries}{}{0em}{}
+\titleformat{\subsection}{\large\bfseries}{}{0em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries}{}{0em}{}
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    {\Huge \textbf{Design Specification}}\\[1.5cm]
+    {\Large Travel Request Web Application}\\[1cm]
+    {\Large Version 1.0}\\[1cm]
+    {\Large Author: Melvin}\\[1cm]
+    {\Large Date: \today}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+\section{Introduction}
+
+\subsection{Purpose}
+This document describes the detailed design of the Travel Request Web Application (TravelApp). It focuses on:
+\begin{itemize}
+    \item Individual pages and their purpose.
+    \item Backend routes and controllers.
+    \item Data models.
+    \item Libraries, packages, and dependencies required for deployment (for example, in a Docker container).
+\end{itemize}
+
+\subsection{Scope}
+The scope includes the final version of the project used for the course, with a Python Flask backend and an SQLite database.
+
+\section{Technology Stack}
+
+\subsection{Languages}
+\begin{itemize}
+    \item Python 3.x (backend)
+    \item HTML and Jinja2 templates (frontend)
+    \item CSS via Bootstrap (styling)
+\end{itemize}
+
+\subsection{Frameworks and Libraries}
+\begin{itemize}
+    \item Flask
+    \item Flask-SQLAlchemy
+    \item Werkzeug (password hashing)
+    \item Bootstrap (via CDN)
+\end{itemize}
+
+\subsection{Database}
+\begin{itemize}
+    \item SQLite, file-based database \texttt{travel.db}
+\end{itemize}
+
+\section{Pages and Routes}
+
+\subsection{Overview}
+Pages are rendered by Flask routes. All HTML files are stored in the \texttt{templates/} directory.
+
+\subsection{Login Page}
+\begin{itemize}
+    \item \textbf{Route:} \texttt{/login}
+    \item \textbf{Template:} \texttt{login.html}
+    \item \textbf{Purpose:} Authenticate user with email and password.
+    \item \textbf{Behavior:}
+    \begin{itemize}
+        \item GET: Render empty login form.
+        \item POST: Validate credentials, set session, redirect to dashboard on success.
+    \end{itemize}
+\end{itemize}
+
+\subsection{Dashboard}
+\begin{itemize}
+    \item \textbf{Route:} \texttt{/dashboard}
+    \item \textbf{Template:} \texttt{dashboard.html}
+    \item \textbf{Purpose:} Main landing page after login.
+    \item \textbf{Elements:}
+    \begin{itemize}
+        \item Card or button for \textbf{New Request}.
+        \item Card or button for \textbf{My History}.
+        \item Card or button for \textbf{Manager Portal} (manager only).
+    \end{itemize}
+\end{itemize}
+
+\subsection{New Request Page}
+\begin{itemize}
+    \item \textbf{Route:} \texttt{/requests/new}
+    \item \textbf{Template:} \texttt{new\_request.html}
+    \item \textbf{Purpose:} Allow employees to create a new travel request.
+    \item \textbf{Fields:}
+    \begin{itemize}
+        \item Destination
+        \item Start date
+        \item End date
+        \item Estimated cost
+        \item Reason for travel
+    \end{itemize}
+    \item \textbf{Behavior:}
+    \begin{itemize}
+        \item Validates that all fields are filled and dates are valid.
+        \item Creates a new \texttt{TravelRequest} with status \texttt{Pending}.
+    \end{itemize}
+\end{itemize}
+
+\subsection{My Requests Page}
+\begin{itemize}
+    \item \textbf{Route:} \texttt{/requests/my}
+    \item \textbf{Template:} \texttt{my\_requests.html}
+    \item \textbf{Purpose:} Show all requests submitted by the logged-in user.
+    \item \textbf{Content:}
+    \begin{itemize}
+        \item Table of requests with destination, dates, cost, submitted date, and status.
+        \item Link or button to open the detailed view of each request.
+    \end{itemize}
+\end{itemize}
+
+\subsection{Manager Portal}
+\begin{itemize}
+    \item \textbf{Route:} \texttt{/requests/manage}
+    \item \textbf{Template:} \texttt{manager\_requests.html}
+    \item \textbf{Purpose:} Let managers see and manage all employee requests.
+    \item \textbf{Content:}
+    \begin{itemize}
+        \item Table with employee name, email, destination, date submitted, cost, status.
+        \item \textbf{Review} button linking to the request detail page.
+    \end{itemize}
+\end{itemize}
+
+\subsection{Request Detail Page}
+\begin{itemize}
+    \item \textbf{Route:} \texttt{/requests/<id>}
+    \item \textbf{Template:} \texttt{request\_detail.html}
+    \item \textbf{Purpose:} Show the full information for a single request and allow managers to change its status.
+    \item \textbf{Behavior:}
+    \begin{itemize}
+        \item For employees: read-only view of their own requests.
+        \item For managers: form to approve, deny, or mark the request as settled and add a comment.
+    \end{itemize}
+\end{itemize}
+
+\section{Backend Design}
+
+\subsection{Helpers}
+\begin{itemize}
+    \item \texttt{current\_user()} -- returns the logged-in user object from the session.
+    \item \texttt{login\_required} decorator -- restricts routes to authenticated users.
+    \item \texttt{manager\_required} decorator -- restricts routes to manager role.
+\end{itemize}
+
+\subsection{Models}
+\subsubsection{User}
+\begin{itemize}
+    \item \texttt{id}, \texttt{email}, \texttt{name}, \texttt{password\_hash}, \texttt{role}
+\end{itemize}
+
+\subsubsection{TravelRequest}
+\begin{itemize}
+    \item \texttt{id}, \texttt{requester\_id}, \texttt{destination}, \texttt{start\_date}, \texttt{end\_date},
+    \item \texttt{estimated\_cost}, \texttt{reason}, \texttt{status}, \texttt{submitted\_on}, \texttt{manager\_comment}
+\end{itemize}
+
+\section{Dependencies for Docker Container}
+
+If this application is deployed in a Docker container, at minimum it needs:
+
+\subsection{System-Level Dependencies}
+\begin{itemize}
+    \item Base image with Python 3 (for example: \texttt{python:3.11-slim})
+    \item \texttt{gcc} / build tools (optional, depending on packages)
+\end{itemize}
+
+\subsection{Python Packages}
+The following pip packages should be installed (these correspond to the \texttt{requirements.txt} file):
+
+\begin{itemize}
+    \item \texttt{Flask}
+    \item \texttt{Flask-SQLAlchemy}
+    \item \texttt{Werkzeug}
+    \item \texttt{gunicorn} (for production deployment, optional for class)
+\end{itemize}
+
+\subsection{Environment Variables}
+Possible environment variables:
+\begin{itemize}
+    \item \texttt{FLASK\_APP=app.py}
+    \item \texttt{FLASK\_ENV=production} or \texttt{development}
+    \item \texttt{SECRET\_KEY} (can be hardcoded for the class project)
+\end{itemize}
+
+\section{Non-Functional Design Notes}
+
+\subsection{Usability}
+\begin{itemize}
+    \item Simple, clean UI based on cards and tables.
+    \item Clear buttons for each action (submit, approve, deny, logout).
+\end{itemize}
+
+\subsection{Maintainability}
+\begin{itemize}
+    \item All routes are in \texttt{app.py} for this version.
+    \item In the future, routes could be split into blueprints: \texttt{auth}, \texttt{employee}, \texttt{manager}.
+\end{itemize}
+
+\section{Conclusion}
+This design specification summarizes how TravelApp is put together: the pages, routes, models, and packages required to run it locally or in a container. It is intentionally simple to match a first-time web application project.
+
+\end{document}

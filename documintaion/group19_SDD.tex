@@ -1,0 +1,244 @@
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{tabularx}
+\usepackage{titlesec}
+
+\titleformat{\section}{\Large\bfseries}{}{0em}{}
+\titleformat{\subsection}{\large\bfseries}{}{0em}{}
+
+\begin{document}
+
+% ---------- COVER PAGE ----------
+\begin{titlepage}
+    \centering
+    {\Huge \textbf{Software Design Document (SDD)}}\\[1cm]
+    {\Large Travel Request Web Application}\\[0.5cm]
+    {\large Group 19}\\[0.5cm]
+    {\large Version 2.0}\\[1cm]
+    {\large Date: \today}
+\end{titlepage}
+
+% ---------- TABLE OF CONTENTS ----------
+\tableofcontents
+\newpage
+
+% =====================================================
+% VERSION DESCRIPTION
+% =====================================================
+\section{Version Description}
+
+\begin{tabularx}{\linewidth}{|c|X|c|}
+\hline
+\textbf{Version} & \textbf{Description} & \textbf{Date} \\
+\hline
+1.0 & Initial SDD created for Snapshot 1: basic layout, login flow, database models. & 2025-11-20 \\
+\hline
+2.0 & Updated for Snapshot 2: added request creation, history pages, manager portal structure, improved architecture summary. & \today \\
+\hline
+\end{tabularx}
+
+\newpage
+
+% =====================================================
+% INTRODUCTION
+% =====================================================
+\section{Introduction}
+
+\subsection{Purpose}
+The purpose of this Software Design Document (SDD) is to describe the structure, components, and internal design of the Travel Request Web Application.  
+This document outlines how the system is built and how users interact with the different modules.
+
+\subsection{Intended Audience}
+This document is intended for:
+\begin{itemize}
+    \item Software Engineering instructor
+    \item Team members in Group 19
+    \item Anyone reviewing the internal design of the project
+\end{itemize}
+
+\subsection{System Overview}
+The system allows employees to submit travel requests while managers review and approve them.  
+It includes:
+\begin{itemize}
+    \item Login system
+    \item Employee dashboard
+    \item Travel request submission
+    \item Request history
+    \item Manager review portal
+\end{itemize}
+
+\newpage
+
+% =====================================================
+% SYSTEM ARCHITECTURE
+% =====================================================
+\section{System Architecture}
+
+\subsection{High-Level Structure}
+The project uses a simple three-layer architecture:
+\begin{itemize}
+    \item \textbf{Frontend (UI):} HTML templates using Jinja2
+    \item \textbf{Backend:} Python Flask application
+    \item \textbf{Database:} SQLite file (\texttt{travel.db})
+\end{itemize}
+
+\subsection{User Flow}
+\begin{itemize}
+    \item User opens browser → loads login page
+    \item User enters email/password → backend verifies credentials
+    \item Employees see dashboard with:
+    \begin{itemize}
+        \item New request
+        \item My history
+    \end{itemize}
+    \item Managers additionally see:
+    \begin{itemize}
+        \item Manager portal
+        \item Review page for each request
+    \end{itemize}
+\end{itemize}
+
+\subsection{Backend Routing Overview}
+\begin{itemize}
+    \item \texttt{/login} — login page
+    \item \texttt{/dashboard} — employee or manager dashboard
+    \item \texttt{/requests/new} — submit a new travel request
+    \item \texttt{/requests/my} — view personal request history
+    \item \texttt{/requests/manage} — manager-only portal
+    \item \texttt{/requests/<id>} — full request detail and manager actions
+\end{itemize}
+
+\newpage
+
+% =====================================================
+% USER INTERFACE
+% =====================================================
+\section{User Interface}
+
+\subsection{Login Page}
+The login page contains:
+\begin{itemize}
+    \item Email input
+    \item Password input
+    \item Error message if login fails
+\end{itemize}
+
+\subsection{Dashboard}
+Different dashboards appear depending on the user's role:
+\begin{itemize}
+    \item \textbf{Employee Dashboard:} New Request, My Requests
+    \item \textbf{Manager Dashboard:} Manager Portal, Review Requests
+\end{itemize}
+
+\subsection{New Request Form}
+Includes fields for:
+\begin{itemize}
+    \item Destination
+    \item Travel dates (start and end)
+    \item Estimated cost
+    \item Reason for travel
+\end{itemize}
+
+\subsection{Request History Page}
+Displays a table of all previous submissions including:
+\begin{itemize}
+    \item Destination
+    \item Submitted date
+    \item Status
+    \item View details button
+\end{itemize}
+
+\subsection{Manager Portal}
+Managers see:
+\begin{itemize}
+    \item All requests from all employees
+    \item Status (Pending, Approved, Denied, Settled)
+    \item Button to open detailed page
+\end{itemize}
+
+\subsection{Request Detail Page}
+Managers may:
+\begin{itemize}
+    \item Approve request
+    \item Deny request
+    \item Mark request as settled
+    \item Leave comments
+\end{itemize}
+
+\newpage
+
+% =====================================================
+% DATABASE DESIGN
+% =====================================================
+\section{Database Design}
+
+\subsection{Tables}
+
+\subsubsection{Users Table}
+\begin{itemize}
+    \item id
+    \item email
+    \item name
+    \item password\_hash
+    \item role (employee or manager)
+\end{itemize}
+
+\subsubsection{TravelRequest Table}
+\begin{itemize}
+    \item id
+    \item requester\_id
+    \item destination
+    \item start\_date
+    \item end\_date
+    \item estimated\_cost
+    \item reason
+    \item status
+    \item submitted\_on
+    \item manager\_comment
+\end{itemize}
+
+\subsection{Database Format}
+SQLite database stored locally as:
+\begin{verbatim}
+travel.db
+\end{verbatim}
+
+\newpage
+
+% =====================================================
+% GLOSSARY
+% =====================================================
+\section{Glossary}
+
+\begin{tabularx}{\linewidth}{|c|X|}
+\hline
+\textbf{Term} & \textbf{Definition} \\
+\hline
+UI & User Interface \\
+\hline
+API & Application Programming Interface \\
+\hline
+DB & Database \\
+\hline
+CRUD & Create, Read, Update, Delete operations \\
+\hline
+HTTP & Web communication protocol \\
+\hline
+\end{tabularx}
+
+\newpage
+
+% =====================================================
+% REFERENCES
+% =====================================================
+\section{References}
+
+\begin{itemize}
+    \item Flask Documentation: \url{https://flask.palletsprojects.com/}
+    \item Bootstrap CSS: \url{https://getbootstrap.com/}
+    \item SQLite Documentation: \url{https://sqlite.org/docs.html}
+\end{itemize}
+
+\end{document}

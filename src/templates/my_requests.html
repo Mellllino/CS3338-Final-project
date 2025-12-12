@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2 class="fw-bold m-0">My Requests</h2>
+  <a href="{{ url_for('new_request') }}" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus me-1"></i> New Request</a>
+</div>
+
+<div class="card mb-4">
+  <div class="card-body p-2 bg-light rounded d-flex gap-2">
+      <a href="{{ url_for('my_requests', status='All') }}" class="btn btn-sm {% if status_filter == 'All' %}btn-white shadow-sm fw-bold{% else %}text-muted{% endif %}">All</a>
+      <a href="{{ url_for('my_requests', status='Pending') }}" class="btn btn-sm {% if status_filter == 'Pending' %}btn-white shadow-sm fw-bold text-warning{% else %}text-muted{% endif %}">Pending</a>
+      <a href="{{ url_for('my_requests', status='Approved') }}" class="btn btn-sm {% if status_filter == 'Approved' %}btn-white shadow-sm fw-bold text-success{% else %}text-muted{% endif %}">Approved</a>
+  </div>
+</div>
+
+<div class="table-wrapper">
+  {% if requests_list %}
+  <table class="table table-custom mb-0">
+    <thead>
+      <tr>
+        <th>Destination</th>
+        <th>Travel Dates</th>
+        <th>Cost</th>
+        <th>Submitted</th>
+        <th>Status</th>
+        <th class="text-end">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for req in requests_list %}
+      <tr>
+        <td class="fw-bold">{{ req.destination }}</td>
+        <td>
+            <div class="small text-muted">Start: {{ req.start_date.strftime('%b %d, %Y') }}</div>
+            <div class="small text-muted">End: {{ req.end_date.strftime('%b %d, %Y') }}</div>
+        </td>
+        <td class="fw-bold">${{ "%.2f"|format(req.estimated_cost) }}</td>
+        <td class="text-muted small">{{ req.submitted_on.strftime('%b %d') }}</td>
+        <td>
+          <span class="status-badge 
+            {% if req.status == 'Pending' %}bg-pending
+            {% elif req.status == 'Approved' %}bg-approved
+            {% elif req.status == 'Denied' %}bg-denied
+            {% else %}bg-settled{% endif %}">
+            {{ req.status }}
+          </span>
+        </td>
+        <td class="text-end">
+          <a href="{{ url_for('request_detail', rid=req.id) }}" class="btn btn-sm btn-outline-secondary">
+            <i class="fa-solid fa-chevron-right"></i>
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <div class="p-5 text-center text-muted">
+      <i class="fa-solid fa-folder-open fa-2x mb-3"></i>
+      <p>No requests found matching this filter.</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

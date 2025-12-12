@@ -1,0 +1,246 @@
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{tabularx}
+\usepackage{titlesec}
+\usepackage{hyperref} % Hyperref should usually be loaded last
+
+% Formatting section titles
+\titleformat{\section}{\Large\bfseries}{}{0em}{}
+\titleformat{\subsection}{\large\bfseries}{}{0em}{}
+\titleformat{\subsubsection}{\bfseries}{}{0em}{}
+
+% specific setting to make tables less cramped
+\renewcommand{\arraystretch}{1.2}
+
+\begin{document}
+
+% ---------- COVER PAGE ----------
+\begin{titlepage}
+    \centering
+    {\Huge \textbf{Software Requirements Specification (SRS)}}\\[1cm]
+    {\Large Travel Request Web Application}\\[0.5cm]
+    {\large Group 19}\\[0.5cm]
+    {\large Version 2.0}\\[1cm]
+    {\large Date: \today}
+\end{titlepage}
+
+% ---------- TABLE OF CONTENTS ----------
+\tableofcontents
+\newpage
+
+% =====================================================
+% VERSION DESCRIPTION
+% =====================================================
+\section{Version Description}
+
+\begin{tabularx}{\linewidth}{|c|X|c|}
+\hline
+\textbf{Version} & \textbf{Description} & \textbf{Date} \\
+\hline
+1.0 & Initial SRS created for Snapshot 1. Defined basic requirements for login, dashboards, and travel request submission. & 2025-11-20 \\
+\hline
+2.0 & Updated for Snapshot 2. Added manager requirements, improved request flow, clarified system constraints, expanded legal and ethical section. & \today \\
+\hline
+\end{tabularx}
+
+\newpage
+
+% =====================================================
+% INTRODUCTION
+% =====================================================
+\section{Introduction}
+
+\subsection{Purpose}
+The purpose of this Software Requirements Specification (SRS) is to document all functional and non-functional requirements for the Travel Request Web Application.
+This application replaces paper-based travel request forms with a digital system that allows employees to submit requests and managers to review them.
+
+\subsection{Intended Audience}
+This SRS is intended for:
+\begin{itemize}
+    \item Group 19 development team
+    \item CS3338 instructor and graders
+    \item Any reviewer analyzing system requirements
+\end{itemize}
+
+\subsection{Scope}
+The Travel Request Web Application allows:
+\begin{itemize}
+    \item Employees to log in, submit travel requests, and view their request history
+    \item Managers to log in, view all requests, approve/deny/settle them, and leave comments
+\end{itemize}
+
+This application \textbf{will not} book flights, hotels, or transportation.
+
+\subsection{System Overview}
+The system is a web-based Flask application using HTML templates for the UI and an SQLite database to store user accounts and travel requests.
+
+\newpage
+
+% =====================================================
+% EXTERNAL INTERFACE REQUIREMENTS
+% =====================================================
+\section{External Interface Requirements}
+
+\subsection{User Interface Requirements}
+
+\subsubsection{Login Page}
+The system shall provide:
+\begin{itemize}
+    \item A form for email and password entry
+    \item An error message for invalid credentials
+    \item Automatic redirection to the dashboard on success
+\end{itemize}
+
+\subsubsection{Employee Dashboard}
+The system shall show:
+\begin{itemize}
+    \item Button to submit a new travel request
+    \item Button to view request history
+\end{itemize}
+
+\subsubsection{New Request Page}
+The system shall allow employees to enter:
+\begin{itemize}
+    \item Destination
+    \item Start date and end date
+    \item Estimated cost
+    \item Reason for travel
+\end{itemize}
+
+\subsubsection{Request History Page}
+The system shall display a list of all travel requests submitted by the user, including:
+\begin{itemize}
+    \item Destination
+    \item Status
+    \item Submission date
+\end{itemize}
+
+\subsubsection{Manager Portal}
+The system shall allow managers to:
+\begin{itemize}
+    \item View all employee travel requests
+    \item Filter by status (Pending, Approved, Denied, Settled)
+    \item Open a detailed request view
+\end{itemize}
+
+\subsubsection{Request Detail Page}
+Managers shall be able to:
+\begin{itemize}
+    \item Approve a request
+    \item Deny a request
+    \item Mark a request as settled
+    \item Leave comments
+\end{itemize}
+
+\newpage
+
+% =====================================================
+% SOFTWARE INTERFACE REQUIREMENTS
+% =====================================================
+\section{Software Interfaces}
+
+\subsection{Backend Software}
+The backend system shall be built using:
+\begin{itemize}
+    \item Python 3.x
+    \item Flask Framework
+\end{itemize}
+
+\subsection{Database Interface}
+The application shall use:
+\begin{itemize}
+    \item SQLite database named \texttt{travel.db}
+    \item SQLAlchemy ORM for database operations
+\end{itemize}
+
+Database operations include:
+\begin{itemize}
+    \item Creating new travel requests
+    \item Updating request status
+    \item Retrieving user-specific request history
+    \item Retrieving all requests for manager view
+\end{itemize}
+
+\subsection{Authentication Interface}
+The system shall:
+\begin{itemize}
+    \item Validate email/password combinations
+    \item Store password hashes using Werkzeug
+    \item Restrict manager routes to users with role = "manager"
+\end{itemize}
+
+\newpage
+
+% =====================================================
+% LEGAL AND ETHICAL CONSIDERATIONS
+% =====================================================
+\section{Legal and Ethical Considerations}
+
+\subsection{User Data Protection}
+The system shall:
+\begin{itemize}
+    \item Store passwords securely using hashing
+    \item Protect personal data (name, email)
+    \item Avoid storing unnecessary sensitive information
+\end{itemize}
+
+\subsection{Access Control}
+The system shall:
+\begin{itemize}
+    \item Prevent employees from accessing manager-only pages
+    \item Prevent managers from modifying database outside allowed actions
+    \item Ensure each employee can only see their own requests
+\end{itemize}
+
+\subsection{Ethical Responsibilities}
+Developers must:
+\begin{itemize}
+    \item Use data only for testing and educational purposes
+    \item Ensure no real LA Public Defender data is stored
+    \item Maintain transparency in how the system stores and handles data
+\end{itemize}
+
+\subsection{Limitations}
+This system is not intended for real government use and is purely educational.
+No real travel processing, billing, or financial documentation is generated.
+
+\newpage
+
+% =====================================================
+% GLOSSARY
+% =====================================================
+\section{Glossary}
+
+\begin{tabularx}{\linewidth}{|c|X|}
+\hline
+\textbf{Term} & \textbf{Definition} \\
+\hline
+SRS & Software Requirements Specification \\
+\hline
+SDD & Software Design Document \\
+\hline
+UI & User Interface \\
+\hline
+DB & Database \\
+\hline
+ORM & Object-Relational Mapping \\
+\hline
+HTTP & Protocol used for web communication \\
+\hline
+\end{tabularx}
+
+\newpage
+
+% =====================================================
+% REFERENCES
+% =====================================================
+\section{References}
+
+\begin{itemize}
+    \item Flask Documentation: \url{https://flask.palletsprojects.com/}
+    \item SQLAlchemy Documentation: \url{https://www.sqlalchemy.org/}
+    \item Bootstrap Documentation: \url{https://getbootstrap.com/}
+\end{itemize}
+
+\end{document}

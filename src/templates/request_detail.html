@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    
+    <nav aria-label="breadcrumb" class="mb-4">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+        {% if user.role == 'manager' %}
+        <li class="breadcrumb-item"><a href="{{ url_for('manage_requests') }}">Manager Portal</a></li>
+        {% else %}
+        <li class="breadcrumb-item"><a href="{{ url_for('my_requests') }}">My Requests</a></li>
+        {% endif %}
+        <li class="breadcrumb-item active" aria-current="page">Request #{{ tr.id }}</li>
+      </ol>
+    </nav>
+
+    <div class="card shadow-lg border-0 overflow-hidden">
+      <div class="p-3 text-center 
+        {% if tr.status == 'Pending' %}bg-warning-subtle text-warning-emphasis
+        {% elif tr.status == 'Approved' %}bg-success-subtle text-success-emphasis
+        {% elif tr.status == 'Denied' %}bg-danger-subtle text-danger-emphasis
+        {% else %}bg-secondary-subtle{% endif %}">
+        <h5 class="m-0 fw-bold"><i class="fa-solid fa-circle-info me-2"></i> Status: {{ tr.status }}</h5>
+      </div>
+
+      <div class="card-body p-5">
+        <div class="d-flex justify-content-between align-items-start mb-4">
+            <div>
+                <h2 class="fw-bold mb-1">{{ tr.destination }}</h2>
+                <p class="text-muted">Submitted by {{ tr.requester.name }} on {{ tr.submitted_on.strftime('%B %d, %Y') }}</p>
+            </div>
+            <div class="text-end">
+                <div class="text-muted small">Estimated Cost</div>
+                <div class="fs-4 fw-bold text-primary">${{ "%.2f"|format(tr.estimated_cost) }}</div>
+            </div>
+        </div>
+
+        <div class="row mb-4 p-3 bg-light rounded mx-1">
+            <div class="col-md-6 border-end">
+                <label class="text-muted small fw-bold">START DATE</label>
+                <div class="fs-5"><i class="fa-regular fa-calendar me-2"></i> {{ tr.start_date.strftime('%b %d, %Y') }}</div>
+            </div>
+            <div class="col-md-6 ps-md-4">
+                <label class="text-muted small fw-bold">END DATE</label>
+                <div class="fs-5"><i class="fa-regular fa-calendar-check me-2"></i> {{ tr.end_date.strftime('%b %d, %Y') }}</div>
+            </div>
+        </div>
+
+        <div class="mb-5">
+            <label class="text-muted small fw-bold mb-2">REASON FOR TRAVEL</label>
+            <p class="fs-6 lh-base">{{ tr.reason }}</p>
+        </div>
+
+        {% if tr.manager_comment %}
+        <div class="alert alert-secondary border-0">
+            <div class="d-flex gap-2">
+                <i class="fa-solid fa-comment-dots mt-1"></i>
+                <div>
+                    <strong>Manager Note:</strong><br>
+                    {{ tr.manager_comment }}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if user.role == 'manager' %}
+        <hr class="my-4">
+        <h5 class="fw-bold mb-3">Manager Actions</h5>
+        <form method="post">
+            <div class="mb-3">
+                <label class="form-label text-muted small">ADD DECISION COMMENT</label>
+                <textarea name="comment" class="form-control bg-light" rows="2" placeholder="Reason for approval/denial..."></textarea>
+            </div>
+            <div class="d-flex gap-2">
+                <button type="submit" name="action" value="approve" class="btn btn-success flex-grow-1"><i class="fa-solid fa-check me-2"></i> Approve</button>
+                <button type="submit" name="action" value="deny" class="btn btn-danger flex-grow-1"><i class="fa-solid fa-xmark me-2"></i> Deny</button>
+                <button type="submit" name="action" value="settle" class="btn btn-secondary flex-grow-1"><i class="fa-solid fa-archive me-2"></i> Mark Settled</button>
+            </div>
+        </form>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

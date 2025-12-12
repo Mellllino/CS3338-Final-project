@@ -1,0 +1,215 @@
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{titlesec}
+
+\titleformat{\section}{\Large\bfseries}{}{0em}{}
+\titleformat{\subsection}{\large\bfseries}{}{0em}{}
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    {\Huge \textbf{Travel Request Web Application}}\\[1.5cm]
+    {\Large README \& User Manual}\\[1cm]
+    {\Large Version 1.0}\\[1cm]
+    {\Large Author: Melvin}\\[1cm]
+    {\Large Date: \today}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+\section{Introduction}
+
+\subsection{Purpose}
+This document explains how to install, run, and use the Travel Request Web Application (TravelApp). It is written as a simple user manual and project README for the final software engineering project.
+
+\subsection{Project Summary}
+The TravelApp is a web application that helps employees submit travel requests and allows managers to review and act on those requests. It is inspired by the needs of the Los Angeles Public Defender's Office, which currently relies on paper-based travel forms.
+
+Main features:
+\begin{itemize}
+    \item Login and role-based access (employee and manager).
+    \item Employees can submit new travel requests.
+    \item Employees can view the status of their past and pending requests.
+    \item Managers can review all requests and approve, deny, or mark them as settled.
+\end{itemize}
+
+\section{Repository Information}
+
+\subsection{GitHub Repository}
+The source code and documents are stored in a GitHub repository:
+
+\begin{itemize}
+    \item \textbf{Repository URL:} \texttt{https://github.com/your-username/travelapp} \\
+    (Replace with the actual URL for your project.)
+\end{itemize}
+
+\subsection{Project Structure (Important Folders)}
+\begin{itemize}
+    \item \texttt{src/} -- Flask application code and HTML templates.
+    \item \texttt{documentation/} -- LaTeX documents (SRS, SDD, design spec, README manual, etc.).
+    \item \texttt{testrail/} -- Exported TestRail reports for Snapshots 2--4.
+\end{itemize}
+
+\section{Installation}
+
+\subsection{Prerequisites}
+To run the project locally you need:
+\begin{itemize}
+    \item Python 3.x
+    \item \texttt{pip} (Python package manager)
+    \item (Optional) A virtual environment such as \texttt{venv}
+\end{itemize}
+
+\subsection{Setup Steps}
+From the project root directory:
+
+\begin{enumerate}
+    \item Change into the \texttt{src} directory:
+    \begin{verbatim}
+cd src
+    \end{verbatim}
+    \item (Optional) Create and activate a virtual environment.
+    \item Install dependencies:
+    \begin{verbatim}
+pip install -r requirements.txt
+    \end{verbatim}
+    \item Run the Flask application:
+    \begin{verbatim}
+python app.py
+    \end{verbatim}
+    \item Open a browser and go to:
+    \begin{verbatim}
+http://127.0.0.1:5000
+    \end{verbatim}
+\end{enumerate}
+
+\section{Demo Accounts}
+
+For testing, two demo users are created automatically when the database is initialized.
+
+\subsection{Employee Account}
+\begin{itemize}
+    \item Email: \texttt{employee@example.com}
+    \item Password: \texttt{password123}
+    \item Role: Employee
+\end{itemize}
+
+\subsection{Manager Account}
+\begin{itemize}
+    \item Email: \texttt{manager@example.com}
+    \item Password: \texttt{password123}
+    \item Role: Manager
+\end{itemize}
+
+\section{Using the Application}
+
+\subsection{Login}
+\begin{enumerate}
+    \item Navigate to the login page.
+    \item Enter the email and password for a demo account.
+    \item If the login is successful, you will see a dashboard with a welcome message.
+\end{enumerate}
+
+\subsection{Employee Workflow}
+
+\subsubsection{Dashboard}
+After login as an employee you see:
+\begin{itemize}
+    \item \textbf{New Request} card or button.
+    \item \textbf{My History} card or button.
+\end{itemize}
+
+\subsubsection{Create a New Request}
+\begin{enumerate}
+    \item Click on \textbf{New Request}.
+    \item Fill in:
+    \begin{itemize}
+        \item Destination
+        \item Start date and end date
+        \item Estimated cost
+        \item Business reason
+    \end{itemize}
+    \item Submit the form.
+    \item A success message appears and the request is saved with status \textbf{Pending}.
+\end{enumerate}
+
+\subsubsection{View Request History}
+\begin{enumerate}
+    \item Click on \textbf{My History}.
+    \item A table shows all your requests with:
+    \begin{itemize}
+        \item Destination
+        \item Travel dates
+        \item Cost
+        \item Submission date
+        \item Current status (Pending, Approved, Denied, Settled)
+    \end{itemize}
+    \item Click on a row's \textbf{View} or \textbf{Details} button to see full information.
+\end{enumerate}
+
+\subsection{Manager Workflow}
+
+\subsubsection{Manager Portal}
+If you log in as a manager:
+\begin{itemize}
+    \item The dashboard also shows a \textbf{Manager Portal} card or button.
+\end{itemize}
+
+\noindent In the Manager Portal:
+\begin{enumerate}
+    \item View a table of all requests from all users.
+    \item Each row includes the employee name, destination, cost, and status.
+    \item Click \textbf{Review} to open the detailed request page.
+\end{enumerate}
+
+\subsubsection{Reviewing a Request}
+On the request detail page:
+\begin{itemize}
+    \item The manager sees:
+    \begin{itemize}
+        \item Requester information
+        \item Destination and dates
+        \item Estimated cost
+        \item Business reason
+        \item Current status
+        \item Any existing manager comments
+    \end{itemize}
+    \item The manager can:
+    \begin{itemize}
+        \item Enter a decision comment.
+        \item Click \textbf{Approve}, \textbf{Deny}, or \textbf{Mark Settled}.
+    \end{itemize}
+\end{itemize}
+
+\section{Goals and Motivation}
+
+\subsection{Why This Application Is Needed}
+The project is motivated by the Los Angeles Public Defender's Office, which currently handles travel requests using paper forms. The TravelApp:
+\begin{itemize}
+    \item Reduces lost paperwork and manual tracking.
+    \item Makes it easier to review, approve, and audit travel requests.
+    \item Improves transparency by clearly showing request statuses.
+\end{itemize}
+
+\section{Known Limitations and Future Work}
+
+\subsection{Current Limitations}
+\begin{itemize}
+    \item No integration with real authentication services (simple demo accounts only).
+    \item Does not actually book flights or hotels.
+    \item No email notifications for approvals or denials.
+\end{itemize}
+
+\subsection{Possible Future Enhancements}
+\begin{itemize}
+    \item Email or SMS notifications.
+    \item Exporting reports for accounting or budgeting.
+    \item Role-based dashboards with statistics (total costs, pending count, etc.).
+\end{itemize}
+
+
+\end{document}

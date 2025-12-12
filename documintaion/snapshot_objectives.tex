@@ -1,0 +1,100 @@
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{titlesec}
+
+\titleformat{\section}{\Large\bfseries}{}{0em}{}
+
+\begin{document}
+
+\begin{center}
+    {\Huge Snapshot Objectives}\\[0.5cm]
+    {\Large Travel Request Web Application}\\[0.25cm]
+    {\large Version 1.0 -- \today}
+\end{center}
+
+\vspace{1cm}
+
+\section{Snapshot 1: Basic Skeleton and Core Flow}
+
+\begin{itemize}
+    \item Set up Flask project structure (\texttt{src/}, \texttt{templates/}, \texttt{requirements.txt}).
+    \item Implement basic routes:
+    \begin{itemize}
+        \item \texttt{/login}
+        \item \texttt{/dashboard}
+    \end{itemize}
+    \item Create simple HTML templates for login and dashboard.
+    \item Add SQLite database configuration and define:
+    \begin{itemize}
+        \item \texttt{User} model
+        \item \texttt{TravelRequest} model (initial fields)
+    \end{itemize}
+    \item Seed demo users (employee and manager).
+    \item Verify that a user can log in and see a basic dashboard.
+\end{itemize}
+
+\section{Snapshot 2: Travel Request Creation and History}
+
+\begin{itemize}
+    \item Implement \texttt{/requests/new} route and template.
+    \item Add form validation for destination, dates, cost, and reason.
+    \item Save new requests in the database with status \texttt{Pending}.
+    \item Implement \texttt{/requests/my} to show:
+    \begin{itemize}
+        \item All requests for the logged-in user.
+        \item Destination, dates, cost, submitted date, status.
+    \end{itemize}
+    \item Add basic filtering or tabs (All, Pending, Approved) if time allows.
+    \item Create initial TestRail test cases for:
+    \begin{itemize}
+        \item Login.
+        \item New request submission.
+        \item Viewing request history.
+    \end{itemize}
+\end{itemize}
+
+\section{Snapshot 3: Manager Portal and Decision Flow}
+
+\begin{itemize}
+    \item Implement \texttt{/requests/manage} route and manager-only access.
+    \item Show all requests with:
+    \begin{itemize}
+        \item Employee name
+        \item Destination
+        \item Estimated cost
+        \item Status
+    \end{itemize}
+    \item Implement request detail page \texttt{/requests/<id>}:
+    \begin{itemize}
+        \item Display full request information.
+        \item Manager actions: Approve, Deny, Mark Settled.
+        \item Store manager comment.
+    \end{itemize}
+    \item Update history and manager views so status changes are visible.
+    \item Add more TestRail tests to cover:
+    \begin{itemize}
+        \item Manager approval flow.
+        \item Denial with comment.
+        \item Settling a request.
+    \end{itemize}
+\end{itemize}
+
+\section{Snapshot 4: Polishing, Validation, and Documentation}
+
+\begin{itemize}
+    \item Improve UI with clearer alerts and labels.
+    \item Add extra validation checks (for example, start date before end date).
+    \item Clean up navigation (logout button, consistent header).
+    \item Finalize:
+    \begin{itemize}
+        \item SRS Version 2.0
+        \item SDD Version 2.0
+        \item README / User Manual
+        \item Design Specification
+    \end{itemize}
+    \item Run full TestRail test run and export reports for submission.
+    \item Verify GitHub repository structure and prepare final submission.
+\end{itemize}
+
+\end{document}
